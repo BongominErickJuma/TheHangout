@@ -1,0 +1,26 @@
+<%- include("partials/header.ejs") %>
+<div class="note">
+  <h1>select a category</h1>
+  <form action="/joke" method="post">
+    <select id="category" name="category">
+      <option value="Any" name="Any">Any</option>
+      <option value="Misc" name="Misc">Misc</option>
+      <option value="Programming" name="Programming">Programming</option>
+      <option value="Dark" name="Dark">Dark</option>
+      <option value="Pun" name="Pun">Pun</option>
+      <option value="Spooky" name="Spooky">Spooky</option>
+      <option value="Christmas" name="Christmas">Christmas</option>
+    </select>
+
+    <button type="submit">send</button>
+  </form>
+</div>
+
+<div class="note joke">
+  <p><%= joke %></p>
+  <hr />
+  <div class="btn-lg">
+    <a href="/logout" role="button"><button>logout</button></a>
+  </div>
+</div>
+<%- include("partials/footer.ejs") %>
