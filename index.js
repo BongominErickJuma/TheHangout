@@ -38,6 +38,22 @@ const db = new pg.Client({
 
 db.connect();
 
+const createJokeUsersTable = `
+    CREATE TABLE IF NOT EXISTS joke_users (
+        id SERIAL PRIMARY KEY,
+        email VARCHAR(255) NOT NULL,
+        password varchar(100) NOT NULL
+    );
+`;
+
+db.query(createJokeUsersTable, (err) => {
+  if (err) {
+    console.error("Error creating users table:", err);
+  } else {
+    console.log("Users table created successfully!");
+  }
+});
+
 let joke;
 
 app.get("/", (req, res) => {
@@ -78,7 +94,7 @@ app.post("/register", async (req, res) => {
   const password = req.body.password;
 
   try {
-    const result = await db.query("SELECT * FROM users WHERE email = $1", [
+    const result = await db.query("SELECT * FROM joke_users WHERE email = $1", [
       username,
     ]);
 
@@ -90,7 +106,7 @@ app.post("/register", async (req, res) => {
           console.log("error hashing password");
         } else {
           const result = await db.query(
-            "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+            "INSERT INTO joke_users (email, password) VALUES ($1, $2) RETURNING *",
             [username, hash]
           );
           const user = result.rows[0];
@@ -126,9 +142,10 @@ passport.use(
   "local",
   new Strategy(async function verify(username, password, cb) {
     try {
-      const result = await db.query("SELECT * FROM users WHERE email = $1", [
-        username,
-      ]);
+      const result = await db.query(
+        "SELECT * FROM joke_users WHERE email = $1",
+        [username]
+      );
 
       if (result.rows.length > 0) {
         const user = result.rows[0];
