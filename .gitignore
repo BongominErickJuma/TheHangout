@@ -2,4 +2,4 @@
 .env
 
 #ignore nodemodules
-nodem_odules
+node_modules
