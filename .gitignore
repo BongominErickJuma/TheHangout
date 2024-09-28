@@ -1,2 +1,5 @@
-#Hide
+#ignore .env
 .env
+
+#ignore nodemodules
+nodem_odules
